@@ -13,17 +13,19 @@ fun main(){
     val boardController = BoardController()
     val memberController = MemberController()
 
-    val prompt = if(loginedMember == null){
-        "명령어)"
-    }else{
-        "${loginedMember!!.nickname})"
-    }
+
 
 
 
 
 
     while(true){
+
+        val prompt = if(loginedMember == null){
+            "명령어)"
+        }else{
+            "${loginedMember!!.nickname})"
+        }
 
 
         print(prompt)

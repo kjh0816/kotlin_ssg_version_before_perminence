@@ -62,6 +62,18 @@ class BoardRepository {
     }
 
 
+
+    fun getBoardIdByCode(boardCode: String): Int {
+        for(board in boards){
+            if(board.code == boardCode){
+                return board.id
+            }
+        }
+        return 0
+
+    }
+
+
     var boardLastId = 0
 
     val boards = mutableListOf<Board>()

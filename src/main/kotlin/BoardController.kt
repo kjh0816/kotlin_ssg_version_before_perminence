@@ -77,12 +77,14 @@ class BoardController {
         val isUsableName = boardRepository.isUsableName(name)
         if(!isUsableName){
             println("`${name}`은(는) 이미 사용중인 게시판 이름입니다.")
+            return
         }
         println("새 코드를 입력해주세요.")
         val code = readLineTrim()
         val isUsableCode = boardRepository.isUsableCode(code)
         if(!isUsableCode){
             println("`${code}`은(는) 이미 사용중인 게시판 코드입니다.")
+            return
         }
 
         boardRepository.modify(board, name, code)

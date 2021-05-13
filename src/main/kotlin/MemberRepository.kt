@@ -15,7 +15,7 @@ class MemberRepository {
                 return false
             }
         }
-        return false
+        return true
     }
 
     fun getMemberByLoginId(loginId: String): Member? {

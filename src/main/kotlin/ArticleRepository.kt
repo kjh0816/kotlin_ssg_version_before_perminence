@@ -1,5 +1,8 @@
 class ArticleRepository {
 
+
+
+
     fun addArticle(memberId: Int, title: String, body: String, boardId: Int) {
 
         val id = ++articleLastId
@@ -41,33 +44,59 @@ class ArticleRepository {
     fun articleDetail(article: Article?) {
 
         val board = boardRepository.getBoardById(article!!.boardId)
+        val member = memberRepository.getMemberById(article.memberId)
 
         println("번호      : ${article.id}")
         println("게시판    : ${board!!.name}")
         println("제목      : ${article.title}")
         println("내용      : ${article.body}")
-        println("작성자    : ${article.memberId}")
+        println("작성자    : ${member!!.nickname}")
         println("최초 작성일: ${article.regDate}")
         println("수정일자   : ${article.updateDate}")
     }
 
-    fun getFilteredArticle(searchKeyword: String, page: Int, itemCountInAPage: Int, boardId: Int) {
-        val filtered1Articles = getSearchKeywordFilteredArticles(articles, searchKeyword, boardId)
+    fun getFilteredArticle(searchKeyword: String, page: Int, boardCode: String, itemCountInAPage: Int) {
+        val filtered1Articles = getSearchKeywordFilteredArticles(articles, searchKeyword, boardCode)
         val filtered2Articles = getPageFilteredArticles(filtered1Articles, page, itemCountInAPage)
     }
 
 
 
-    private fun getSearchKeywordFilteredArticles(articles: List<Article>, searchKeyword: String, boardId: Int): List<Article> {
+    private fun getSearchKeywordFilteredArticles(articles: List<Article>, searchKeyword: String, boardCode: String): List<Article> {
         val filteredArticles = mutableListOf<Article>()
-        for(article in articles ){
-            if(article.title.contains(searchKeyword) && article.boardId == boardId){
-                filteredArticles.add(article)
+
+
+        val boardId = boardRepository.getBoardIdByCode(boardCode)
+
+        if(searchKeyword.isNotEmpty() && boardId != 0){
+
+            for(article in articles){
+                if(article.title.contains(searchKeyword) && article.boardId == boardId){
+                    filteredArticles.add(article)
+                }
             }
+            return filteredArticles
         }
-        return filteredArticles
+        else if(searchKeyword.isNotEmpty() && boardId == 0) {
+            for (article in articles) {
+                if (article.title.contains(searchKeyword)) {
+                    filteredArticles.add(article)
+                }
+            }
+            return filteredArticles
+        }
+        else if(searchKeyword.isEmpty() && boardId != 0){
+            for(article in articles){
+                if(article.boardId == boardId){
+                    filteredArticles.add(article)
+                }
+            }
+            return filteredArticles
+        }
+
+        return articles
     }
-    private fun getPageFilteredArticles(
+    fun getPageFilteredArticles(
         filtered1Articles: List<Article>,
         page: Int,
         itemCountInAPage: Int
@@ -98,7 +127,9 @@ class ArticleRepository {
 
     }
 
-    var articleLastId = 0
-    val articles = mutableListOf<Article>()
+        var articleLastId = 0
+        val articles = mutableListOf<Article>()
+
+
 
 }

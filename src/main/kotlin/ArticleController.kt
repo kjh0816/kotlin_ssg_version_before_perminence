@@ -1,7 +1,7 @@
 import java.lang.NumberFormatException
 
 class ArticleController {
-    fun add(req: Req) {
+    fun write(req: Req) {
         if(loginedMember == null){
             println("로그인 후 이용해주세요.")
             return
@@ -124,23 +124,15 @@ class ArticleController {
     fun list(req: Req) {
         val page = req.getIntParam("page", 1)
         val searchKeyword = req.getStrParam("searchKeyword", "")
+        val boardCode = req.getStrParam("boardCode","")
 
-        val boardId = req.getIntParam("boardId",0)
-        if(boardId == 0){
-            println("게시판 번호를 입력해주세요.")
-            return
-        }
+        val itemCountInAPage = 10
 
-        val board = boardRepository.getBoardById(boardId)
-        if(board == null){
-            println("`${boardId}`은(는) 존재하지 않는 게시판 번호입니다.")
-            return
-        }
 
 
 
         println("번호 / 게시판 / 작성자 / 제목 / 내용 / 갱신날짜")
-        articleRepository.getFilteredArticle(searchKeyword, page, 10, boardId)
+        articleRepository.getFilteredArticle(searchKeyword, page, boardCode, itemCountInAPage)
 
     }
 }
