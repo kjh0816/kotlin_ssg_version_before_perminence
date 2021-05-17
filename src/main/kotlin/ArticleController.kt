@@ -131,8 +131,19 @@ class ArticleController {
 
 
 
+
+        val filteredArticles = articleRepository.getFilteredArticle(searchKeyword, page, boardCode, itemCountInAPage)
+
         println("번호 / 게시판 / 작성자 / 제목 / 내용 / 갱신날짜")
-        articleRepository.getFilteredArticle(searchKeyword, page, boardCode, itemCountInAPage)
+        for(article in filteredArticles){
+
+            val member = memberRepository.getMemberById(article.memberId)
+            val board =  boardRepository.getBoardById(article.boardId)
+
+            println("${article.id} / ${board!!.name} / ${member!!.id} / ${article.title} / ${article.body} / ${article.updateDate}")
+
+
+        }
 
     }
 }

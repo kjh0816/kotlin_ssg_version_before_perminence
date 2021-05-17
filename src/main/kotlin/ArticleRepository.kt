@@ -3,13 +3,16 @@ class ArticleRepository {
 
 
 
-    fun addArticle(memberId: Int, title: String, body: String, boardId: Int) {
+    fun addArticle(memberId: Int, title: String, body: String, boardId: Int): Int {
 
         val id = ++articleLastId
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
 
         articles.add(Article(id,regDate, updateDate, memberId, boardId, title, body))
+
+
+        return id
 
 
 
@@ -55,9 +58,11 @@ class ArticleRepository {
         println("수정일자   : ${article.updateDate}")
     }
 
-    fun getFilteredArticle(searchKeyword: String, page: Int, boardCode: String, itemCountInAPage: Int) {
+    fun getFilteredArticle(searchKeyword: String, page: Int, boardCode: String, itemCountInAPage: Int): List<Article> {
         val filtered1Articles = getSearchKeywordFilteredArticles(articles, searchKeyword, boardCode)
         val filtered2Articles = getPageFilteredArticles(filtered1Articles, page, itemCountInAPage)
+
+        return filtered2Articles
     }
 
 
@@ -94,13 +99,15 @@ class ArticleRepository {
             return filteredArticles
         }
 
-        return articles
+        else{
+            return articles
+        }
     }
     fun getPageFilteredArticles(
         filtered1Articles: List<Article>,
         page: Int,
         itemCountInAPage: Int
-    ) {
+    ): List<Article> {
 
         val filteredArticles = mutableListOf<Article>()
 
@@ -118,12 +125,7 @@ class ArticleRepository {
         }
 
 
-        for(article in filteredArticles){
-            val member = memberRepository.getMemberById(article.memberId)
-            println("${article.id} / ${member!!.nickname} / ${article.title} / ${article.body} / ${article.updateDate}")
-
-
-        }
+        return filteredArticles
 
     }
 
